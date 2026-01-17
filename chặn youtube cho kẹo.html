@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Góc Học Tập Của Tuệ An</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Quicksand cho phông chữ dễ thương -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Thư viện Confetti (Pháo giấy) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Thư viện Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(40px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: move 10s infinite alternate;
+        }
+
+        @keyframes move {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(20px, -20px) scale(1.1);
+            }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Hình nền trang trí mờ ảo -->
+    <div class="blob bg-pink-300 w-64 h-64 rounded-full top-10 left-10"></div>
+    <div class="blob bg-yellow-200 w-72 h-72 rounded-full bottom-20 right-10 animation-delay-2000"></div>
+    <div class="blob bg-blue-200 w-48 h-48 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    </div>
+
+    <!-- Khối nội dung chính -->
+    <div
+        class="bg-white/80 backdrop-blur-md border-4 border-white shadow-2xl rounded-3xl p-8 max-w-md w-full text-center relative z-10 transition-transform hover:scale-[1.02] duration-300">
+
+        <!-- Icon trang trí -->
+        <div class="flex justify-center space-x-4 mb-6">
+            <div class="bg-pink-100 p-3 rounded-full floating" style="animation-delay: 0s;">
+                <i data-lucide="book-open" class="w-8 h-8 text-pink-500"></i>
+            </div>
+            <div class="bg-yellow-100 p-3 rounded-full floating" style="animation-delay: 0.5s;">
+                <i data-lucide="lightbulb" class="w-8 h-8 text-yellow-500"></i>
+            </div>
+            <div class="bg-blue-100 p-3 rounded-full floating" style="animation-delay: 1s;">
+                <i data-lucide="pencil" class="w-8 h-8 text-blue-500"></i>
+            </div>
+        </div>
+
+        <!-- Lời chào (thay đổi bằng JS) -->
+        <h1 id="greeting" class="text-3xl font-bold text-gray-800 mb-2">Chào Kẹo xinh!</h1>
+
+        <!-- Thông báo chính -->
+        <div class="bg-red-50 border border-red-100 rounded-xl p-4 mb-6">
+            <p class="text-red-500 font-semibold text-lg flex items-center justify-center gap-2">
+                <i data-lucide="lock" class="w-5 h-5"></i>
+                YouTube đang nghỉ ngơi rồi!
+            </p>
+            <p class="text-gray-600 mt-2 text-sm">
+                Bây giờ là giờ học bài mà đúng không Tuệ An? <br>
+                Học xong rồi mình xem sau nhé!
+            </p>
+        </div>
+
+        <!-- Hình ảnh động viên (Sử dụng emoji lớn cho gọn nhẹ) -->
+        <div class="text-6xl mb-6 floating">
+            👩‍🎓✨
+        </div>
+
+        <!-- Lời khuyên ngẫu nhiên -->
+        <p id="quote" class="text-gray-600 italic mb-8 text-sm px-4">
+            "Học tập là hạt giống của kiến thức, kiến thức là hạt giống của hạnh phúc."
+        </p>
+
+        <!-- Nút hành động -->
+        <button onclick="promiseToStudy()"
+            class="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold py-4 rounded-xl shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 group">
+            <span>Kẹo đi học bài ngay đây!</span>
+            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+        </button>
+
+    </div>
+
+    <!-- Footer nhỏ -->
+    <div class="absolute bottom-4 text-center w-full text-gray-400 text-xs">
+        <p class="font-medium">Yêu thương Kẹo nhiều lắm ❤️</p>
+    </div>
+
+    <script>
+        // Khởi tạo icons
+        lucide.createIcons();
+
+        // 1. Xử lý lời chào theo giờ
+        const hour = new Date().getHours();
+        const greetingElement = document.getElementById('greeting');
+
+        if (hour >= 5 && hour < 12) {
+            greetingElement.textContent = "Chào buổi sáng, Kẹo ơi!";
+        } else if (hour >= 12 && hour < 18) {
+            greetingElement.textContent = "Chào buổi chiều, Tuệ An!";
+        } else {
+            greetingElement.textContent = "Tối rồi, Kẹo nhớ học bài nhé!";
+        }
+
+        // 2. Random câu động viên
+        const quotes = [
+            "Cố lên Tuệ An ơi, cháu làm được mà!",
+            "Chăm chỉ học tập, tương lai sáng lạn!",
+            "Kẹo ngoan học bài xong sẽ được thưởng nè!",
+            "Tập trung một chút, bài tập xong ngay thôi!",
+            "Kiến thức là kho báu, chìa khóa là việc học.",
+            "Mỗi bài toán giải được là Kẹo giỏi hơn một chút!"
+        ];
+        document.getElementById('quote').textContent = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"';
+
+        // 3. Hàm xử lý khi bấm nút (Hiệu ứng Confetti)
+        function promiseToStudy() {
+            // Bắn pháo giấy
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function () {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                // since particles fall down, start a bit higher than random
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+
+            // Thay đổi nút bấm
+            const btn = document.querySelector('button');
+            btn.innerHTML = `<span>Giỏi lắm! Yêu Kẹo ❤️</span>`;
+            btn.classList.remove('from-pink-500', 'to-purple-500');
+            btn.classList.add('from-green-400', 'to-green-600');
+
+            // Tùy chọn: Đóng tab sau 3 giây (nếu trình duyệt cho phép)
+            // setTimeout(() => { window.close(); }, 3000); 
+        }
+    </script>
+</body>
+
+</html>
